@@ -9,7 +9,7 @@ use Validator;
 use Hash;
 use Session;
 use App\Models\User;
-
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -38,7 +38,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput($request->all);
         }
 
@@ -48,18 +48,16 @@ class AuthController extends Controller
         ];
 
         Auth::attempt($data);
-
         if (Auth::check()) { // true sekalian session field di users nanti bisa dipanggil via Auth
             //Login Success
+            User::where('email', $request->email)->update(['last_login' => Carbon::now()]);
             return redirect()->route('home');
-
         } else { // false
 
             //Login Fail
             Session::flash('error', 'Email atau password salah');
             return redirect()->route('login');
         }
-
     }
 
     public function showFormRegister()
@@ -88,7 +86,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput($request->all);
         }
 
@@ -97,9 +95,12 @@ class AuthController extends Controller
         $user->email = strtolower($request->email);
         $user->password = Hash::make($request->password);
         $user->email_verified_at = \Carbon\Carbon::now();
+        $user->telephone = '';
+        $user->is_active = true;
+        $user->employe_no = '';
         $simpan = $user->save();
 
-        if($simpan){
+        if ($simpan) {
             Session::flash('success', 'Register berhasil! Silahkan login untuk mengakses data');
             return redirect()->route('login');
         } else {
@@ -113,6 +114,4 @@ class AuthController extends Controller
         Auth::logout(); // menghapus session yang aktif
         return redirect()->route('login');
     }
-
-
 }

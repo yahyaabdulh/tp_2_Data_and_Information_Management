@@ -1,25 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <div class="col-md-12 mt-5">
+@extends('layouts.app')
+@section('content')
+    <div class="">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h3>Dashboard</h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="height: 800px;">
                     <h5>Selamat datang di halaman dashboard, <strong>{{ Auth::user()->name }}</strong></h5>
-                    <a href="{{ route('logout') }}" class="btn btn-danger">Logout</a>
                 </div>
             </div>
         </div>
     </div>
-</body>
-</html>
+@endsection
+
+
